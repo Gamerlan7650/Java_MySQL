@@ -1,0 +1,9 @@
+/**
+ * 
+ */
+/**
+ * 
+ */
+module Java_MySQL {
+	requires java.desktop;
+}

@@ -1,0 +1,9 @@
+/**
+ * 
+ */
+/**
+ * 
+ */
+module Sakila_consultas {
+	requires java.desktop;
+}

@@ -1,0 +1,308 @@
+package app;
+
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.awt.event.ActionEvent;
+
+public class persona extends JFrame {
+	
+	private static final long serialVersionUID = 1L;
+	private JPanel Panel;
+	private JTextField txtClv;
+	private JTextField txtN;
+	private JTextField txtD;
+	private JTextField txtT;
+	private JTextField txtE;
+	private JTextField txtF;
+	private JTextField txtID;
+	private JComboBox cbxG;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					
+					//Define el tema de la ventana a Windows, esta por defecto en NetBeans, pero acá en EclipseIDE lo puse manualmente
+					for(javax.swing.UIManager.LookAndFeelInfo info: javax.swing.UIManager.getInstalledLookAndFeels()) {
+					if("Windows".equals(info.getName())) {
+						javax.swing.UIManager.setLookAndFeel(info.getClassName());
+					    break;
+					}
+					}
+					//.............................................................................................................
+					
+					persona frame = new persona(); //aca continúa el codigo por defecto de los frames en EclipseIDE
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	
+		//..............CONEXIÓN................
+	
+		public static final String URL = "jdbc:mysql://localhost:3306/Escuela";
+		public static final String USERNAME = "root";
+		public static final String PASSWORD = "1234";
+		
+		//Variables para realizar consultas SQL y ejecutar codigo SQL---
+		PreparedStatement ps;
+		ResultSet rs;
+		//--------------------------------------------------------------
+		
+		public static Connection getConection()//los metodos pueden ser de tipo int, String, etc. En este caso será de tipo Connection
+		{
+		 Connection con = null;
+		 
+		 try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			con= (Connection)DriverManager.getConnection(URL,USERNAME,PASSWORD);
+			JOptionPane.showMessageDialog(null, "Conexion exitosa");
+			
+		 }catch(Exception e) {
+			 System.out.println(e);
+		 }
+		return con;
+		}
+
+		//..............CONEXIÓN................
+		
+		
+		private void limpiarCajas() {
+		txtClv.setText(null);
+		txtN.setText(null);
+		txtD.setText(null);
+		txtT.setText(null);
+		txtE.setText(null);
+		txtF.setText(null);
+		cbxG.setSelectedIndex(0);
+		}
+	
+	
+	public persona() {//<--- recuerda que es el contructor de la clase que contiene tus frames 
+		
+		//txtID.setVisible(false);
+		
+		
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 426, 443);
+		Panel = new JPanel();
+		Panel.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(Panel);
+		Panel.setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("Clave: ");
+		lblNewLabel.setBounds(37, 40, 52, 14);
+		Panel.add(lblNewLabel);
+		
+		txtClv = new JTextField();
+		txtClv.setBounds(160, 37, 109, 20);
+		Panel.add(txtClv);
+		txtClv.setColumns(10);
+		
+		JLabel lblNewLabel_1 = new JLabel("Nombre: ");
+		lblNewLabel_1.setBounds(37, 65, 52, 14);
+		Panel.add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_2 = new JLabel("Domicilio: ");
+		lblNewLabel_2.setBounds(37, 90, 52, 14);
+		Panel.add(lblNewLabel_2);
+		
+		JLabel lblNewLabel_3 = new JLabel("Teléfono: ");
+		lblNewLabel_3.setBounds(37, 115, 52, 14);
+		Panel.add(lblNewLabel_3);
+		
+		JLabel lblNewLabel_4 = new JLabel("Email: ");
+		lblNewLabel_4.setBounds(37, 140, 52, 14);
+		Panel.add(lblNewLabel_4);
+		
+		JLabel lblNewLabel_5 = new JLabel("Fecha de nacimiento: ");
+		lblNewLabel_5.setBounds(37, 165, 124, 14);
+		Panel.add(lblNewLabel_5);
+		
+		txtN = new JTextField();
+		txtN.setColumns(10);
+		txtN.setBounds(160, 62, 221, 20);
+		Panel.add(txtN);
+		
+		txtD = new JTextField();
+		txtD.setColumns(10);
+		txtD.setBounds(160, 87, 221, 20);
+		Panel.add(txtD);
+		
+		txtT = new JTextField();
+		txtT.setColumns(10);
+		txtT.setBounds(160, 112, 221, 20);
+		Panel.add(txtT);
+		
+		txtE = new JTextField();
+		txtE.setColumns(10);
+		txtE.setBounds(160, 137, 221, 20);
+		Panel.add(txtE);
+		
+		txtF = new JTextField();
+		txtF.setColumns(10);
+		txtF.setBounds(160, 162, 221, 20);
+		Panel.add(txtF);
+		
+		cbxG = new JComboBox();
+		cbxG.setModel(new DefaultComboBoxModel(new String[] {"Selecciona ", "Masculino", "Femenino"}));
+		cbxG.setBounds(160, 204, 109, 22);
+		Panel.add(cbxG);
+		
+		JLabel lblGnero = new JLabel("Género: ");
+		lblGnero.setBounds(37, 208, 52, 14);
+		Panel.add(lblGnero);
+		
+		JButton btnG = new JButton("Guardar");
+		
+		btnG.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			Connection con =null;
+				try {
+					
+					con = getConection();
+					ps = con.prepareStatement(/*Acá se coloca la consulta SQL*/ "INSERT INTO persona (clave,nombre,domicilio,telefono,email,fecha_n,genero) VALUES(?,?,?,?,?,?,?)");
+					ps.setString(1,txtClv.getText());
+					ps.setString(2,txtN.getText());
+					ps.setString(3,txtD.getText());
+					ps.setString(4,txtT.getText());
+					ps.setString(5,txtE.getText());
+					ps.setDate(6,Date.valueOf(txtF.getText()));
+					ps.setString(7,cbxG.getSelectedItem().toString());
+					
+					int res = ps.executeUpdate();
+					
+					if (res > 0) {
+						JOptionPane.showMessageDialog(null, "Informacion guardada");
+						limpiarCajas();
+					}else {
+						JOptionPane.showMessageDialog(null, "Error al guardar informacion");
+						limpiarCajas();
+					}
+					
+						con.close();//cierre de conexión
+					
+				}catch(Exception e1){
+					
+					System.err.println(e1);
+					
+				}
+				
+			}
+		});
+		btnG.setBounds(10, 266, 89, 23);
+		Panel.add(btnG);
+		
+		JButton btnE = new JButton("Eliminar");
+		btnE.setBounds(307, 266, 89, 23);
+		Panel.add(btnE);
+		
+		JButton btnM = new JButton("Modificar");
+		btnM.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Connection con =null;
+				try {
+					
+					con = getConection();
+					ps = con.prepareStatement("UPDATE persona SET clave=?,nombre=?,domicilio=?,telefono=?,email=?,fecha_n=?,genero=? WHERE Id=?");
+					ps.setString(1,txtClv.getText());
+					ps.setString(2,txtN.getText());
+					ps.setString(3,txtD.getText());
+					ps.setString(4,txtT.getText());
+					ps.setString(5,txtE.getText());
+					ps.setDate(6,Date.valueOf(txtF.getText()));
+					ps.setString(7,cbxG.getSelectedItem().toString());
+					ps.setString(8, txtID.getText());
+					
+					int res = ps.executeUpdate();
+					
+					if (res > 0) {
+						JOptionPane.showMessageDialog(null, "Informacion modificada");
+						limpiarCajas();
+					}else {
+						JOptionPane.showMessageDialog(null, "Error al modificar");
+						limpiarCajas();
+					}
+					
+						con.close();//cierre de conexión
+					
+				}catch(Exception e1){
+					
+					System.err.println(e1);
+					
+				}
+			}
+		});
+		btnM.setBounds(109, 266, 89, 23);
+		Panel.add(btnM);
+		
+		JButton btnL = new JButton("Limpiar");
+		btnL.setBounds(208, 266, 89, 23);
+		Panel.add(btnL);
+		
+		JButton btnB = new JButton("Buscar");
+		btnB.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			
+				Connection con =null;
+				try {
+					
+				con = getConection();
+				ps = con.prepareStatement("SELECT * FROM persona WHERE clave = ?");
+				ps.setString(1, txtClv.getText());
+				
+				rs = ps.executeQuery();
+				if(rs.next()) {
+					txtID.setText(rs.getString("Id"));
+					txtN.setText(rs.getString("nombre"));
+					txtD.setText(rs.getString("domicilio"));
+					txtT.setText(rs.getString("telefono"));
+					txtE.setText(rs.getString("email"));
+					txtF.setText(rs.getString("fecha_n"));
+					cbxG.setSelectedItem(rs.getString("genero"));
+				}else {
+					JOptionPane.showMessageDialog(null, "No existe una persona con la clave ingresada");
+				}
+				}catch(Exception e1){
+					
+					System.err.println(e1);
+					
+				}
+			}
+		});
+		btnB.setBounds(279, 36, 102, 23);
+		Panel.add(btnB);
+		
+		txtID = new JTextField();
+		txtID.setEnabled(false);
+		txtID.setColumns(10);
+		txtID.setBounds(221, 11, 109, 20);
+		Panel.add(txtID);
+	}
+}

@@ -1,0 +1,125 @@
+package Frames;
+
+import java.awt.EventQueue;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JLabel;
+import javax.swing.JTextPane;
+import javax.swing.JList;
+import javax.swing.JTextArea;
+
+public class conexion_consultas {
+
+	private JFrame frame;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					conexion_consultas window = new conexion_consultas();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	//..............CONEXIÓN................
+
+			public static final String URL = "jdbc:mysql://localhost:3306/sakila";
+			public static final String USERNAME = "root";
+			public static final String PASSWORD = "1234";
+			
+			//Variables para realizar consultas SQL y ejecutar codigo SQL---
+			PreparedStatement ps;
+			ResultSet rs;
+			private JTextArea tMostrar;
+			//--------------------------------------------------------------
+			
+			public static Connection getConection()//los metodos pueden ser de tipo int, String, etc. En este caso será de tipo Connection
+			{
+			 Connection con = null;
+			 
+			 try {
+				Class.forName("com.mysql.cj.jdbc.Driver");
+				con= (Connection)DriverManager.getConnection(URL,USERNAME,PASSWORD);
+				JOptionPane.showMessageDialog(null, "Conexion exitosa");
+				
+			 }catch(Exception e) {
+				 System.out.println(e);
+			 }
+			return con;
+			}
+
+			//..............CONEXIÓN................
+	public conexion_consultas() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame = new JFrame();
+		frame.setBounds(100, 100, 685, 477);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		
+		JButton btnNewButton = new JButton("Conectar");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Connection con = null;//variable de tipo Connection
+					con = getConection();	
+					con.close();
+				}catch(Exception e2) {
+					System.out.println(e2);
+				}
+			}
+		});
+		btnNewButton.setBounds(570, 404, 89, 23);
+		frame.getContentPane().add(btnNewButton);
+		
+		JButton bCount = new JButton("Count");
+		bCount.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				Connection con =null;
+				try {
+					
+				con = getConection();
+				ps = con.prepareStatement("select count(actor_id) from actor");
+				//ps.setString(1, txtClv.getText());
+				rs = ps.executeQuery();
+				if(rs.next()) {
+					tMostrar.setText(rs.getString("count(actor_id)"));
+				}
+				}catch(Exception e1){
+					System.err.println(e1);
+				}
+				
+			}
+		});
+		bCount.setBounds(34, 54, 89, 23);
+		frame.getContentPane().add(bCount);
+		
+		tMostrar = new JTextArea();
+		tMostrar.setBounds(315, 105, 205, 153);
+		frame.getContentPane().add(tMostrar);
+	}
+}

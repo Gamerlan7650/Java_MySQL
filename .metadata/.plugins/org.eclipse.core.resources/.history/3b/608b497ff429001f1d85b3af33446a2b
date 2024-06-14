@@ -1,0 +1,93 @@
+package Frames;
+
+import java.awt.EventQueue;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class conexion_consultas {
+
+	private JFrame frame;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					conexion_consultas window = new conexion_consultas();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	//..............CONEXIÓN................
+
+			public static final String URL = "jdbc:mysql://localhost:3306/sakila";
+			public static final String USERNAME = "root";
+			public static final String PASSWORD = "1234";
+			
+			//Variables para realizar consultas SQL y ejecutar codigo SQL---
+			PreparedStatement ps;
+			ResultSet rs;
+			//--------------------------------------------------------------
+			
+			public static Connection getConection()//los metodos pueden ser de tipo int, String, etc. En este caso será de tipo Connection
+			{
+			 Connection con = null;
+			 
+			 try {
+				Class.forName("com.mysql.cj.jdbc.Driver");
+				con= (Connection)DriverManager.getConnection(URL,USERNAME,PASSWORD);
+				JOptionPane.showMessageDialog(null, "Conexion exitosa");
+				
+			 }catch(Exception e) {
+				 System.out.println(e);
+			 }
+			return con;
+			}
+
+			//..............CONEXIÓN................
+	public conexion_consultas() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame = new JFrame();
+		frame.setBounds(100, 100, 450, 300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		
+		JButton btnNewButton = new JButton("Conectar");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Connection con = null;//variable de tipo Connection
+					con = getConection();	
+					con.close();
+				}catch(Exception e2) {
+					System.out.println(e2);
+				}
+			}
+		});
+		btnNewButton.setBounds(164, 120, 89, 23);
+		frame.getContentPane().add(btnNewButton);
+	}
+}

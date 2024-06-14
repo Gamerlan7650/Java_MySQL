@@ -1,0 +1,7 @@
+INDEX VERSION 1.134+C:\Users\Usuario\OneDrive\Escritorio\ARCHIVOS ACADÉMICOS\U.C.B\5to Semestre\SIS-113\Java_MySQL\.metadata\.plugins\org.eclipse.jdt.core
+1709251404.index
+1865797976.index
+786467959.index
+3413270776.index
+2985327403.index
+3283893708.index
